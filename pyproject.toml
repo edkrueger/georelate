@@ -1,15 +1,14 @@
 [tool.poetry]
-name = "poetrypackagetemplate"
-version = "0.1.1"
-description = ""
+name = "georelate"
+version = "0.0.1"
+description = "Georelate constructs design matrices from geographical data."
 authors = ["edkrueger <edkrueger@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 
 [tool.poetry.dev-dependencies]
 black = "*"
-pipenv-to-requirements = "*"
 pre-commit = "*"
 pylint = "*"
 pytest = "*"

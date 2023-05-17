@@ -1,7 +1,7 @@
 """
 Tests resc.py.
 """
-from poetrypackagetemplate.demo import add, sub
+from georelate.demo import add, sub
 
 
 def test_add():
