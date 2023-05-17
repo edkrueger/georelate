@@ -290,6 +290,9 @@ def design_matrix(
         )
 
         for j in range(k_closest):
+            # this is a false warning,
+            # because I'm passing a different callback,
+            # for each iteration
             # pylint:disable=cell-var-from-loop
             right_k_df = right_df.rename(columns=lambda col: f"{col}_{j + 1}_closest")
             out_df = pd.merge(
