@@ -6,6 +6,7 @@ authors = ["edkrueger <edkrueger@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+numpy = "^1.24.3"
 
 [tool.poetry.dev-dependencies]
 black = "*"
