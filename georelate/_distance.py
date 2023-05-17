@@ -37,6 +37,64 @@ def haversine(p1_lat, p1_lon, p2_lat, p2_lon, radius=6367):
     return radius * d_r
 
 
+def _get_id_keys(
+    left,
+    right,
+    left_id,
+    right_id,
+):
+    """_summary_
+
+    Args:
+        left (_type_): _description_
+        right (_type_): _description_
+        left_id (_type_): _description_
+        right_id (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    left_index_name = left.index.name if left.index.name else "index"
+    right_index_name = right.index.name if right.index.name else "index"
+
+    left_id_key = left_id if left_id else left_index_name
+    right_id_key = right_id if right_id else right_index_name
+
+    return left_id_key, right_id_key
+
+
+def _get_id_keys_with_potential_suffix(left, right, left_id, right_id, suffixes):
+    """_summary_
+
+    Args:
+        left (_type_): _description_
+        right (_type_): _description_
+        left_id (_type_): _description_
+        right_id (_type_): _description_
+        suffixes (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    left_id_key, right_id_key = _get_id_keys(
+        left=left,
+        right=right,
+        left_id=left_id,
+        right_id=right_id,
+    )
+
+    if left_id_key == right_id_key:
+        left_suffix, right_suffix = suffixes
+        if left_suffix:
+            left_id_key = f"{left_id_key}{left_suffix}"
+        if right_suffix:
+            right_id_key = f"{right_id_key}{right_suffix}"
+
+    return left_id_key, right_id_key
+
+
 def distance_table(
     left,
     right,
@@ -78,11 +136,12 @@ def distance_table(
         _type_: _description_
     """
 
-    left_index_name = left.index.name if left.index.name else "index"
-    right_index_name = right.index.name if right.index.name else "index"
-
-    left_id_key = left_id if left_id else left_index_name
-    right_id_key = right_id if right_id else right_index_name
+    left_id_key, right_id_key = _get_id_keys(
+        left=left,
+        right=right,
+        left_id=left_id,
+        right_id=right_id,
+    )
 
     merged_df = pd.merge(
         left=left.reset_index().loc[:, [left_id_key, left_lat, left_lon]],
@@ -112,3 +171,132 @@ def distance_table(
             p2_lon=df_[right_lon_key],
         )
     )
+
+
+def _k_closest(df, left_id, right_id, k):
+    grouped = df.groupby(left_id)
+
+    join_data = []
+
+    for left_id_, group_df in grouped:
+        design_row = {}
+
+        nsmallest_df = group_df.nsmallest(n=k, columns="distance")
+
+        design_row[left_id] = left_id_
+
+        for idx, (_, row) in enumerate(nsmallest_df.iterrows()):
+            design_row[f"{right_id}_{idx + 1 }_closest"] = row[right_id]
+            design_row[f"distance_{idx + 1}_closest"] = row["distance"]
+
+        join_data.append(design_row)
+
+    return pd.DataFrame(join_data)
+
+
+def design_matrix(
+    left,
+    right,
+    left_id=None,
+    right_id=None,
+    left_lat="lat",
+    left_lon="lon",
+    right_lat="lat",
+    right_lon="lon",
+    suffixes=("_left", "_right"),
+    k_closest=None,
+):
+
+    """_summary_
+
+    Args:
+        left (DataFrame): Left DataFrame to merge with. Assumes the index is an id.
+        right (DataFrame): Right DataFrame to merge with. Assumes the index is an id.
+        left_id (str, optional): Column containing the id for the left DataFrame.
+            If None is passed, assumes the index is the id.
+            Defaults to None.
+        right_id (str, optional): Column containing the id for the right DataFrame.
+            If None is passed, assumes the index is the id.
+            Defaults to None.
+        left_lat (str, optional): Column containing the latitude in the left DataFrame.
+            Defaults to "lat".
+        left_lon (str, optional): Column containing the longitude in the left DataFrame.
+            Defaults to "lon".
+        right_lat (str, optional): Column containing the latitude in the right DataFrame.
+            Defaults to "lat".
+        right_lon (str, optional): Column containing the longitude in the right DataFrame.
+            Defaults to "lon".
+        suffixes (tuple, optional): A length-2 sequence where each element is optionally a string
+            indicating the suffix to add to overlapping column names in left and right respectively.
+            Pass a value of None instead of a string to indicate that the column name from
+            left or right should be left as-is, with no suffix.
+            At least one of the values must not be None.
+            Defaults to ("_left", "_right").
+        k_closest (int, optional): Specifies the number of nearest observations
+            for the right DataFrame to include in the output DataFrame
+            for each observations in the left DataFrame.
+
+    Returns:
+        DataFrame: The design matrix.
+    """
+
+    left_id_key, right_id_key = _get_id_keys(
+        left=left, right=right, left_id=left_id, right_id=right_id
+    )
+
+    left_id_key_w_suffix, right_id_key_w_suffix = _get_id_keys_with_potential_suffix(
+        left=left, right=right, left_id=left_id, right_id=right_id, suffixes=suffixes
+    )
+
+    distance_df = distance_table(
+        left,
+        right,
+        left_id=left_id,
+        right_id=right_id,
+        left_lat=left_lat,
+        left_lon=left_lon,
+        right_lat=right_lat,
+        right_lon=right_lon,
+        suffixes=suffixes,
+    )
+
+    left_df = left.reset_index()
+    right_df = right.reset_index()
+
+    k_closest_join_df = _k_closest(
+        df=distance_df,
+        left_id=left_id_key_w_suffix,
+        right_id=right_id_key_w_suffix,
+        k=k_closest,
+    )
+
+    out_df = left_df.copy()
+
+    if k_closest:
+        k_closest_join_df = _k_closest(
+            df=distance_df,
+            left_id=left_id_key_w_suffix,
+            right_id=right_id_key_w_suffix,
+            k=k_closest,
+        )
+        assert set(k_closest_join_df[left_id_key_w_suffix].values) == set(
+            left_df[left_id_key].values
+        )
+        out_df = pd.merge(
+            out_df,
+            k_closest_join_df,
+            left_on=left_id_key,
+            right_on=left_id_key_w_suffix,
+        )
+
+        for j in range(k_closest):
+            # pylint:disable=cell-var-from-loop
+            right_k_df = right_df.rename(columns=lambda col: f"{col}_{j + 1}_closest")
+            out_df = pd.merge(
+                out_df,
+                right_k_df,
+                left_on=f"{right_id_key_w_suffix}_{j + 1}_closest",
+                right_on=f"{right_id_key}_{j + 1}_closest",
+            )
+
+    return out_df
