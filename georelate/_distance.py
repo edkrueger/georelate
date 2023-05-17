@@ -78,17 +78,11 @@ def distance_table(
         _type_: _description_
     """
 
-    print(left)
-    print(right)
-
     left_index_name = left.index.name if left.index.name else "index"
     right_index_name = right.index.name if right.index.name else "index"
 
     left_id_key = left_id if left_id else left_index_name
     right_id_key = right_id if right_id else right_index_name
-
-    print(left_id_key)
-    print(right_id_key)
 
     merged_df = pd.merge(
         left=left.reset_index().loc[:, [left_id_key, left_lat, left_lon]],
