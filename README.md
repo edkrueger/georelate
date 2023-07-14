@@ -1,11 +1,11 @@
-# georelate
+# GEORELATE
 Georelate constructs design matrices from geographical data.
 
 ## User Guide
 
 ### Description
 
-GEORELATE can take any 2 datasets, each containing a set of geographic points, and outputs a new dataset that includes variables indicating which points in one dataset are closest to each point in the other. GEORELATE also creates a new set of variables in the output dataset that indicate how far apart each point is from the nearest points in the other dataset.   
+GEORELATE can take any 2 datasets, each containing a set of geographic points, and output a new dataset that includes variables indicating which points in one dataset are closest to each point in the other. GEORELATE also creates a new set of variables in the output dataset that indicate how far apart each point is from the nearest points in the other dataset.   
 
 ### Installation
 
