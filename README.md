@@ -33,6 +33,10 @@ The two input files below contain fictionalized data for Brazil. The first conta
 
 **Map**
 
+Blue = polling stations
+
+Red = aid projects
+
 ![Capture 500 w](https://github.com/edkrueger/georelate/assets/7817442/1caf5761-9392-4a72-8380-c4f58d89e5ef)
 
 
