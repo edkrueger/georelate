@@ -97,8 +97,7 @@ Red = aid projects
 
 ![Capture 500 w](https://github.com/edkrueger/georelate/assets/7817442/1caf5761-9392-4a72-8380-c4f58d89e5ef)
 
-
-
+![Plot](/docs/artifacts/plot.png)
 
 **Output** 
 <table border="1" class="dataframe">
