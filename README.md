@@ -17,9 +17,9 @@ Requirements:
 Python 3.10+  
 
 ### GEORELATE in action
-To more clearly demonstrate GEORELATE’s functionality in the sections below I include an example of how to apply the package with sample files and code.  
+To more clearly demonstrate GEORELATE’s functionality in the sections below we include an example of how to apply the package with sample files and code.  
 
-The two input files below contain fictionalized data for Brazil. The first contains the IDs and geographic coordinates of polling stations. The second contains the same information for new foreign aid projects. The image below that shows the two sets of points overlayed on a map of Brazil. Finally, GEORELATE was used to create the output dataset shown below the map. The output dataset contains the IDs and distances away of the 2 closest aid projects to each polling station. 
+The two input files below contain fictionalized data for Brazil. The first contains the IDs and geographic coordinates of polling stations. The second contains the same information for new foreign aid projects. The image below that shows the two sets of points overlayed on a map of Brazil. Finally, GEORELATE was used to create the output dataset shown below the map. The output dataset contains the IDs and distances away of the 3 closest aid projects to each polling station. 
 
 **The input and out files are below:**
 
