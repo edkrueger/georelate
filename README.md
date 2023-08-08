@@ -17,18 +17,76 @@ Requirements:
 Python 3.10+  
 
 ### GEORELATE in action
-To more clearly demonstrate GEORELATE’s functionality in the sections below I include an example of how to apply the package with sample files and code.  
+To more clearly demonstrate GEORELATE’s functionality in the sections below we include an example of how to apply the package with sample files and code.  
 
-The two input files below contain fictionalized data for Brazil. The first contains the IDs and geographic coordinates of polling stations. The second contains the same information for new foreign aid projects. The image below that shows the two sets of points overlayed on a map of Brazil. Finally, GEORELATE was used to create the output dataset shown below the map. The output dataset contains the IDs and distances away of the 2 closest aid projects to each polling station. 
+The two input files below contain fictionalized data for Brazil. The first contains the IDs and geographic coordinates of polling stations. The second contains the same information for new foreign aid projects. The image below that shows the two sets of points overlayed on a map of Brazil. Finally, GEORELATE was used to create the output dataset shown below the map. The output dataset contains the IDs and distances away of the 3 closest aid projects to each polling station. 
 
 **The input and out files are below:**
 
 **Polling Stations**
 
-<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>local_id</th>      <th>lat</th>      <th>lon</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>1</td>      <td>-6.69255</td>      <td>-39.76566</td>    </tr>    <tr>      <th>1</th>      <td>2</td>      <td>-4.76871</td>      <td>-39.61186</td>    </tr>    <tr>      <th>2</th>      <td>3</td>      <td>-3.28926</td>      <td>-40.75443</td>    </tr>  </tbody></table>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>local_id</th>
+      <th>lat</th>
+      <th>lon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>-6.69255</td>
+      <td>-39.76566</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>-4.76871</td>
+      <td>-39.61186</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>-3.28926</td>
+      <td>-40.75443</td>
+    </tr>
+  </tbody>
+</table>
 
 **Aid Projects**
-<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>project_id_aid</th>      <th>lat_aid</th>      <th>long_aid</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>p1</td>      <td>-6.61616</td>      <td>-39.97990</td>    </tr>    <tr>      <th>1</th>      <td>p2</td>      <td>-4.76871</td>      <td>-39.77116</td>    </tr>    <tr>      <th>2</th>      <td>p3</td>      <td>-4.26065</td>      <td>-39.39030</td>    </tr>  </tbody></table>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>project_id_aid</th>
+      <th>lat_aid</th>
+      <th>long_aid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>p1</td>
+      <td>-6.61616</td>
+      <td>-39.97990</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>p2</td>
+      <td>-4.76871</td>
+      <td>-39.77116</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>p3</td>
+      <td>-4.26065</td>
+      <td>-39.39030</td>
+    </tr>
+  </tbody>
+</table>
 
 
 **Map**
@@ -39,35 +97,76 @@ Red = aid projects
 
 ![Capture 500 w](https://github.com/edkrueger/georelate/assets/7817442/1caf5761-9392-4a72-8380-c4f58d89e5ef)
 
-
-
+![Plot](/docs/artifacts/plot.png)
 
 **Output** 
-<table border="1" class="dataframe">  <thead>    <tr style="text-align: right;">      <th></th>      <th>index</th>      <th>local_id</th>      <th>lat</th>      <th>lon</th>      <th>project_id_aid_1_closest</th>      <th>distance_1_closest</th>      <th>project_id_aid_2_closest</th>      <th>distance_2_closest</th>      <th>project_id_aid_3_closest</th>      <th>distance_3_closest</th>      <th>index_1_closest</th>      <th>lat_aid_1_closest</th>      <th>long_aid_1_closest</th>      <th>index_2_closest</th>      <th>lat_aid_2_closest</th>      <th>long_aid_2_closest</th>      <th>index_3_closest</th>      <th>lat_aid_3_closest</th>      <th>long_aid_3_closest</th>    </tr>  </thead>  <tbody>    <tr>      <th>0</th>      <td>0</td>      <td>1</td>      <td>-6.69255</td>      <td>-39.76566</td>      <td>p1</td>      <td>25.124568</td>      <td>p2</td>      <td>213.787803</td>      <td>p3</td>      <td>273.415835</td>      <td>0</td>      <td>-6.61616</td>      <td>-39.97990</td>      <td>1</td>      <td>-4.76871</td>      <td>-39.77116</td>      <td>2</td>      <td>-4.26065</td>      <td>-39.3903</td>    </tr>    <tr>      <th>1</th>      <td>1</td>      <td>2</td>      <td>-4.76871</td>      <td>-39.61186</td>      <td>p2</td>      <td>17.640953</td>      <td>p3</td>      <td>61.562643</td>      <td>p1</td>      <td>209.292590</td>      <td>1</td>      <td>-4.76871</td>      <td>-39.77116</td>      <td>2</td>      <td>-4.26065</td>      <td>-39.39030</td>      <td>0</td>      <td>-6.61616</td>      <td>-39.9799</td>    </tr>    <tr>      <th>2</th>      <td>2</td>      <td>3</td>      <td>-3.28926</td>      <td>-40.75443</td>      <td>p3</td>      <td>185.826237</td>      <td>p2</td>      <td>197.251459</td>      <td>p1</td>      <td>379.513297</td>      <td>2</td>      <td>-4.26065</td>      <td>-39.39030</td>      <td>1</td>      <td>-4.76871</td>      <td>-39.77116</td>      <td>0</td>      <td>-6.61616</td>      <td>-39.9799</td>    </tr>  </tbody></table>
-
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>local_id</th>
+      <th>project_id_aid_1_closest</th>
+      <th>distance_1_closest</th>
+      <th>project_id_aid_2_closest</th>
+      <th>distance_2_closest</th>
+      <th>project_id_aid_3_closest</th>
+      <th>distance_3_closest</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>p1</td>
+      <td>25.124568</td>
+      <td>p2</td>
+      <td>213.787803</td>
+      <td>p3</td>
+      <td>273.415835</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+      <td>p3</td>
+      <td>185.826237</td>
+      <td>p2</td>
+      <td>197.251459</td>
+      <td>p1</td>
+      <td>379.513297</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>p2</td>
+      <td>17.640953</td>
+      <td>p3</td>
+      <td>61.562643</td>
+      <td>p1</td>
+      <td>209.292590</td>
+    </tr>
+  </tbody>
+</table>
 
 
 #### Example Code
 Below I include the code used to create the output file (output.csv).
 
 ```python
-import pandas as pd
-from georelate._distance import design_matrix
+from georelate import design_matrix
+from georelate.data import load_poll_aid_data
 
-# Load in the foreign_aid data
-left_df = pd.read.csv("foreign_aid")
-# Load in the polling station data 
-right_df = pd.read("polling_stations.csv")
+# load in the foreign_aid data and the polling station data 
+left_df, right_df = load_poll_aid_data()
 
-# The code below creates the output dataset
-design_matrix(
+# the code below creates the output dataset
+df = design_matrix(
   left = left_df, 
   right = right_df, 
   left_id = "local_id", 
   right_id = "project_id_aid", 
   right_lat = "lat_aid", 
   right_lon = "long_aid", 
-  k_closest=3)
+  k_closest=3
 )
 ```
 

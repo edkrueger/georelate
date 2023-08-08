@@ -205,6 +205,8 @@ def design_matrix(
     right_lon="lon",
     suffixes=("_left", "_right"),
     k_closest=None,
+    include_left_coords=False,
+    include_right_coords=False,
 ):
 
     """_summary_
@@ -235,6 +237,12 @@ def design_matrix(
         k_closest (int, optional): Specifies the number of nearest observations
             for the right DataFrame to include in the output DataFrame
             for each observations in the left DataFrame.
+        include_left_coords (bool, optional): Specifies whether to include the coordinates
+            from the left DataFrame in the results.
+            Defaults to False.
+        include_right_coords (bool, optional): Specifies whether to include the coordinates
+            from the right DataFrame in the results.
+            Defaults to False.
 
     Returns:
         DataFrame: The design matrix.
@@ -260,8 +268,8 @@ def design_matrix(
         suffixes=suffixes,
     )
 
-    left_df = left.reset_index()
-    right_df = right.reset_index()
+    left_df = left.reset_index() if left_id is None else left
+    right_df = right.reset_index() if right_id is None else right
 
     k_closest_join_df = _k_closest(
         df=distance_df,
@@ -273,12 +281,14 @@ def design_matrix(
     out_df = left_df.copy()
 
     if k_closest:
+
         k_closest_join_df = _k_closest(
             df=distance_df,
             left_id=left_id_key_w_suffix,
             right_id=right_id_key_w_suffix,
             k=k_closest,
         )
+
         assert set(k_closest_join_df[left_id_key_w_suffix].values) == set(
             left_df[left_id_key].values
         )
@@ -294,12 +304,22 @@ def design_matrix(
             # because I'm passing a different callback,
             # for each iteration
             # pylint:disable=cell-var-from-loop
-            right_k_df = right_df.rename(columns=lambda col: f"{col}_{j + 1}_closest")
+            right_k_df = right_df.copy()
+
+            if not include_right_coords:
+                # print(f"{k_closest_join_df.columns=}")
+                right_k_df = right_k_df.drop([right_lat, right_lon], axis="columns")
+
+            right_k_df = right_k_df.rename(columns=lambda col: f"{col}_{j + 1}_closest")
+
             out_df = pd.merge(
                 out_df,
                 right_k_df,
                 left_on=f"{right_id_key_w_suffix}_{j + 1}_closest",
                 right_on=f"{right_id_key}_{j + 1}_closest",
             )
+
+    if not include_left_coords:
+        out_df = out_df.drop([left_lat, left_lon], axis="columns")
 
     return out_df

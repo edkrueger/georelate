@@ -269,6 +269,8 @@ def test_design_matrix_some_options_1():
         right_lat="houston_lat",
         right_lon="houston_lon",
         k_closest=k,
+        include_left_coords=True,
+        include_right_coords=True,
     )
 
     print(result_df.T.to_string())
