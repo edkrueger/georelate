@@ -1,6 +1,17 @@
 # GEORELATE
 Georelate constructs design matrices from geographical data.
 
+## Introduction
+Along with an explosion in the availability of granular data, researchers in the social sciences,
+public health and demography are increasingly interested in using location data to identify
+diverse spatial treatment effects, from the local health benefits of new hospitals to the economic
+costs of natural disasters. Yet spatial data can only be as useful as it is easy usable.
+Unfortunately, using this data can require sophisticated techniques. Enter GEORELATE.
+GEORELATE uses code that efficiently computes millions of distance pairs on a single CPU
+core using only Python, Numpy and Pandas to facilitate spatial analysis. This User Guide
+explains the package’s functionality, demonstrates its usability with datasets built into the
+package (also shown below) and explains how users can use GEORELATE for their own work.
+
 ## User Guide
 
 ### Description
